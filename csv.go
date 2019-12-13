@@ -26,13 +26,13 @@ func (c *CsvRecord) GetInt(field string) int {
 	return r
 }
 
-func (c *CsvRecord) GtSetring(field string) string {
-	data, ok := c.Record[fileld]
+func (c *CsvRecord) GetString(field string) string {
+	data, ok := c.Record[field]
 	if ok {
 		return data
 	} else {
 		log.SetPrefix("Warning")
-		log.Println("Get fileld failed! fileld:", field)
+		log.Println("Get fileld failed! field:", field)
 		return ""
 	}
 }
