@@ -23,6 +23,9 @@ func (c *CsvRecord) GetInt(field string) int {
 	var r int
 	var err error
 
+	if c.Record[field] == "" {
+		return 0
+	}
 	if r, err = strconv.Atoi(c.Record[field]); err != nil {
 		log.Fatalln(err.Error())
 	}
@@ -55,6 +58,10 @@ func (c *CsvRecord) GetBool(field string) bool {
 func (c *CsvRecord) GetFloat(field string) float64 {
 	var r float64
 	var err error
+
+	if c.Record[field] == "" {
+		return float64(0)
+	}
 
 	if r, err = strconv.ParseFloat(c.Record[field], 64); err != nil {
 		log.Fatalln(err.Error())
