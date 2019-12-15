@@ -37,6 +37,15 @@ func (c *CsvRecord) GetString(field string) string {
 	}
 }
 
+func (c *CsvRecord) GetBool(field string) bool {
+	var ret bool
+	var err error
+	if ret, err = strconv.ParseBool(c.Record[field]); err != nil {
+		log.Fatalln(err.Error())
+	}
+	return ret
+}
+
 func LoadCsvCfg(filename string, row int) *CsvTable {
 	file, err := os.Open(filename)
 	if err != nil {
