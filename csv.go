@@ -51,6 +51,17 @@ func (c *CsvRecord) GetBool(field string) bool {
 	return ret
 }
 
+//GetFloat 获取Float类型的数据
+func (c *CsvRecord) GetFloat(field string) float64 {
+	var r float64
+	var err error
+
+	if r, err = strconv.ParseFloat(c.Record[field], 64); err != nil {
+		log.Fatalln(err.Error())
+	}
+	return r
+}
+
 //LoadCsvCfg 载入csv文件
 func LoadCsvCfg(filename string, row int) *CsvTable {
 	file, err := os.Open(filename)
