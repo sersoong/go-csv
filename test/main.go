@@ -6,8 +6,9 @@ import (
 	csvmgr "github.com/sersoong/go-csv"
 )
 
+//TestTable 测试表结构
 type TestTable struct {
-	Id    int
+	Name  string
 	Type  int
 	Value int
 	Text  string
@@ -28,15 +29,14 @@ func LoadTestTable() bool {
 	}
 	gTestTable = make(map[int]*TestTable)
 
-	for _, record := range result.Records {
-		id := record.GetInt("id")
+	for index, record := range result.Records {
 		item := &TestTable{
-			id,
+			record.GetString("name"),
 			record.GetInt("type"),
 			record.GetInt("value"),
 			record.GetString("text"),
 		}
-		gTestTable[id] = item
+		gTestTable[index] = item
 	}
 	return true
 }

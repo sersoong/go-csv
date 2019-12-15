@@ -34,11 +34,11 @@ func (c *CsvRecord) GetString(field string) string {
 	data, ok := c.Record[field]
 	if ok {
 		return data
-	} else {
-		log.SetPrefix("Warning")
-		log.Println("Get fileld failed! field:", field)
-		return ""
 	}
+	log.SetPrefix("Warning")
+	log.Println("Get fileld failed! field:", field)
+	log.Println("Wrong ret Data is :", data)
+	return ""
 }
 
 //GetBool 获取bool类型的数据

@@ -1,2 +1,3 @@
-id,type,value,text
-1,2,100,helloworld
+name,type,value,text
+张三,2,100,helloworld
+李四,2,100,helloworld
