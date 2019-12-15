@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/sersoong/go-csv"
+	csvmgr "github.com/sersoong/go-csv"
 )
 
 type TestTable struct {
@@ -13,19 +13,20 @@ type TestTable struct {
 	Text  string
 }
 
-var g_allTestTable map[int]*TestTable
+var gTestTable map[int]*TestTable
 
 func main() {
 	LoadTestTable()
-	fmt.Print(g_allTestTable[1])
+	fmt.Print(gTestTable[1])
 }
 
+//LoadTestTable 载入测试数据表
 func LoadTestTable() bool {
-	var result = csvMgr.LoadCsvCfg("./data.csv", 1)
+	var result = csvmgr.LoadCsvCfg("./data.csv", 1)
 	if result == nil {
 		return false
 	}
-	g_allTestTable = make(map[int]*TestTable)
+	gTestTable = make(map[int]*TestTable)
 
 	for _, record := range result.Records {
 		id := record.GetInt("id")
@@ -35,7 +36,7 @@ func LoadTestTable() bool {
 			record.GetInt("value"),
 			record.GetString("text"),
 		}
-		g_allTestTable[id] = item
+		gTestTable[id] = item
 	}
 	return true
 }

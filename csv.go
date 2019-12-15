@@ -1,4 +1,4 @@
-package csvMgr
+package csvmgr
 
 import (
 	"encoding/csv"
@@ -7,15 +7,18 @@ import (
 	"strconv"
 )
 
+//CsvTable 定义Table结构
 type CsvTable struct {
 	FileName string
 	Records  []CsvRecord
 }
 
+//CsvRecord 定义数据条目结构
 type CsvRecord struct {
 	Record map[string]string
 }
 
+//GetInt 获取Int类型的数据
 func (c *CsvRecord) GetInt(field string) int {
 	var r int
 	var err error
@@ -26,6 +29,7 @@ func (c *CsvRecord) GetInt(field string) int {
 	return r
 }
 
+//GetString 获取string类型的数据
 func (c *CsvRecord) GetString(field string) string {
 	data, ok := c.Record[field]
 	if ok {
@@ -37,6 +41,7 @@ func (c *CsvRecord) GetString(field string) string {
 	}
 }
 
+//GetBool 获取bool类型的数据
 func (c *CsvRecord) GetBool(field string) bool {
 	var ret bool
 	var err error
@@ -46,6 +51,7 @@ func (c *CsvRecord) GetBool(field string) bool {
 	return ret
 }
 
+//LoadCsvCfg 载入csv文件
 func LoadCsvCfg(filename string, row int) *CsvTable {
 	file, err := os.Open(filename)
 	if err != nil {
