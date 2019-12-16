@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	csvmgr "github.com/sersoong/go-csv"
@@ -14,11 +15,24 @@ type TestTable struct {
 	Text  string
 }
 
+//RespData RespData
+type RespData struct {
+	Data []map[string]interface{} `json:"data"`
+}
+
+var jsondata = `{"data":[{"id":0,"name":"张三","value":"aaaaa"},{"id":1,"name":"李四","value":"bbbbb"}]}`
 var gTestTable map[int]*TestTable
 
 func main() {
 	LoadTestTable()
-	fmt.Print(gTestTable[1])
+
+	var ret RespData
+	json.Unmarshal([]byte(jsondata), &ret)
+
+	csvmgr.SaveCsvCfg(ret.Data, "./out.csv")
+	for _, item := range gTestTable {
+		fmt.Println(item)
+	}
 }
 
 //LoadTestTable 载入测试数据表

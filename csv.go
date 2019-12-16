@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"log"
 	"os"
+	"reflect"
 	"strconv"
 )
 
@@ -115,4 +116,48 @@ func LoadCsvCfg(filename string, row int) *CsvTable {
 		allRecords,
 	}
 	return result
+}
+
+//SaveCsvCfg 导出CSV文件
+func SaveCsvCfg(table []map[string]interface{}, filename string) {
+	// 创建csv文件
+	file, err := os.Create(filename)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	defer file.Close()
+
+	// 创建csv writer
+	cw := csv.NewWriter(file)
+
+	var wKey []string
+
+	// 循环遍历传入的数据数组
+	for index, item := range table {
+		var wData []string
+		for key, dataitem := range item {
+			if index == 0 {
+				wKey = append(wKey, key)
+			}
+
+			switch reflect.TypeOf(dataitem).String() {
+			case "bool":
+				boolData := strconv.FormatBool(dataitem.(bool))
+				wData = append(wData, boolData)
+			case "int":
+				intData := strconv.Itoa(dataitem.(int))
+				wData = append(wData, intData)
+			case "float64":
+				floatData := strconv.FormatFloat(dataitem.(float64), 'f', -1, 64)
+				wData = append(wData, floatData)
+			default:
+				wData = append(wData, dataitem.(string))
+			}
+		}
+		if index == 0 {
+			cw.Write(wKey)
+		}
+		cw.Write(wData)
+	}
+	cw.Flush()
 }
