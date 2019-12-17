@@ -120,45 +120,55 @@ func LoadCsvCfg(filename string, row int) *CsvTable {
 
 //SaveCsvCfg 导出CSV文件
 func SaveCsvCfg(table []map[string]interface{}, filename string) {
-	// 创建csv文件
-	file, err := os.Create(filename)
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
-	defer file.Close()
+	rowCount := len(table)
 
-	// 创建csv writer
-	cw := csv.NewWriter(file)
+	// 循环遍历传入的数据数组,取出key作为表格头
+	if rowCount > 0 {
+		// 创建csv文件
+		file, err := os.Create(filename)
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
+		defer file.Close()
 
-	var wKey []string
+		// 创建csv writer
+		cw := csv.NewWriter(file)
 
-	// 循环遍历传入的数据数组
-	for index, item := range table {
-		var wData []string
-		for key, dataitem := range item {
-			if index == 0 {
-				wKey = append(wKey, key)
+		var wKey []string
+
+		for key := range table[0] {
+			wKey = append(wKey, key)
+		}
+
+		// 写入表头
+		cw.Write(wKey)
+		cw.Flush()
+
+		columnCount := len(wKey)
+
+		for _, item := range table {
+			var wData []string
+			// 按表头分列数据
+			for index := 0; index < columnCount; index++ {
+				wTmpData := item[wKey[index]]
+				switch reflect.TypeOf(wTmpData).String() {
+				case "bool":
+					boolData := strconv.FormatBool(wTmpData.(bool))
+					wData = append(wData, boolData)
+				case "int":
+					intData := strconv.Itoa(wTmpData.(int))
+					wData = append(wData, intData)
+				case "float64":
+					floatData := strconv.FormatFloat(wTmpData.(float64), 'f', -1, 64)
+					wData = append(wData, floatData)
+				default:
+					wData = append(wData, wTmpData.(string))
+				}
 			}
 
-			switch reflect.TypeOf(dataitem).String() {
-			case "bool":
-				boolData := strconv.FormatBool(dataitem.(bool))
-				wData = append(wData, boolData)
-			case "int":
-				intData := strconv.Itoa(dataitem.(int))
-				wData = append(wData, intData)
-			case "float64":
-				floatData := strconv.FormatFloat(dataitem.(float64), 'f', -1, 64)
-				wData = append(wData, floatData)
-			default:
-				wData = append(wData, dataitem.(string))
-			}
+			// 写入每行数据
+			cw.Write(wData)
 		}
-		if index == 0 {
-			cw.Write(wKey)
-		}
-		log.Println("writing a new row data to file:", wData)
-		cw.Write(wData)
+		cw.Flush()
 	}
-	cw.Flush()
 }

@@ -20,7 +20,7 @@ type RespData struct {
 	Data []map[string]interface{} `json:"data"`
 }
 
-var jsondata = `{"data":[{"id":0,"name":"张三","value":"aaaaa"},{"id":1,"name":"李四","value":"bbbbb"}]}`
+var jsondata = `{"data":[{"id":0,"name":"张三"},{"id":1,"name":"李四"}]}`
 var gTestTable map[int]*TestTable
 
 func main() {
