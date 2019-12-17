@@ -157,6 +157,7 @@ func SaveCsvCfg(table []map[string]interface{}, filename string) {
 		if index == 0 {
 			cw.Write(wKey)
 		}
+		log.Println("writing a new row data to file:", wData)
 		cw.Write(wData)
 	}
 	cw.Flush()
